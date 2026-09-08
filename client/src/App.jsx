@@ -1,9 +1,15 @@
+import { Route, Routes } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+
 function App() {
     return (
         <div className="App">
-            <h1 className="text-3xl font-bold underline">
-                Tailwind CSS is working!
-            </h1>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/auth" element={<Auth />} />
+            </Routes>
         </div>
     );
 }
