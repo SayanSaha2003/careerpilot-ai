@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import connectDb from './config/connectDB.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,4 +17,5 @@ app.get('/', (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+  connectDb();
 });
