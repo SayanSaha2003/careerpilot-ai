@@ -1,8 +1,20 @@
 import { motion } from "motion/react";
 import { FaXmark, FaCheck, FaRobot } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../utils/firebase";
 
 const Auth = () => {
+    const handleGoogleAuth = async () => {
+        try {
+            const response = await signInWithPopup(auth, provider);
+            console.log(response);
+        }catch (error) {
+            console.log(error);
+        }
+    };
+
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4 backdrop-blur-sm">
             <motion.div
@@ -72,6 +84,7 @@ const Auth = () => {
 
                     {/* Google Button */}
                     <motion.button
+                    onClick={handleGoogleAuth}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.97 }}
                         transition={{ duration: 0.2 }}
