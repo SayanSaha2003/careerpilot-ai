@@ -4,26 +4,32 @@ import axios from "axios";
 
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import { useDispatch } from "react-redux";
+import { setUserData } from "./redux/userSlice";
 
 export const serverUrl = "http://localhost:5000";
 
 function App() {
+
+    const dispatch = useDispatch();
+
+    // Fetch the current user and update the Redux store on component mount
     useEffect(() => {
         const getUser = async () => {
             try {
                 const user = await axios.get(
-                    `${serverUrl}/api/user/current-user`,
-                    {
-                        withCredentials: true,
-                    },
+                    serverUrl + "/api/user/current-user",
+                    { withCredentials: true },
                 );
-                console.log(user.data);
+                // Update the Redux store with the fetched user data
+                dispatch(setUserData(user.data));
             } catch (error) {
-                console.error("Error fetching current user:", error);
+                console.log(error);
+                dispatch(setUserData(null)); // Clear user data on error
             }
         };
         getUser();
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="App">
