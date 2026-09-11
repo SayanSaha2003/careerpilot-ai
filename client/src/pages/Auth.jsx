@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { FaXmark, FaCheck, FaRobot } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebase";
@@ -19,69 +19,76 @@ const Auth = () => {
             let name = User.displayName;
             let email = User.email;
 
-            // Send the user data to the backend for authentication and store it in the database
+            // Send the user data to the backend for authentication
             const res = await axios.post(
                 serverUrl + "/api/auth/google",
                 { name, email },
                 { withCredentials: true },
             );
-            // Update the Redux store with the fetched user data
+
+            console.log(res.data);
             dispatch(setUserData(res.data));
         } catch (error) {
             console.log(error);
-            dispatch(setUserData(null)); // Clear user data on error
+            dispatch(setUserData(null));
         }
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4 backdrop-blur-sm">
+        <div className="relative">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 12 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="relative flex w-full max-w-80 sm:max-w-120 overflow-hidden rounded-[20px] bg-white shadow-2xl"
+                className="relative flex w-full max-w-85 overflow-hidden rounded-2xl border border-gray-700 bg-white shadow-[0_20px_70px_rgba(0,0,0,0.35)] sm:max-w-110"
             >
-                {/* Close */}
-                <motion.button
-                    whileHover={{ rotate: 90 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-5 top-5 z-10 cursor-pointer text-slate-800"
-                >
-                    <FaXmark size={18} />
-                </motion.button>
-
                 {/* Left Section */}
-                <div className="hidden w-[38%] flex-col bg-linear-to-b from-violet-200 via-violet-100 to-violet-300 px-5 py-10 sm:flex">
-                    {/* Robot Logo */}
+                <div className="hidden w-[42%] flex-col justify-between bg-[#020b07] px-5 py-8 sm:flex">
+                    {/* Logo */}
                     <div className="flex flex-col items-center">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-black text-white shadow-md">
-                            <FaRobot size={21} />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl  ">
+                            <img
+                                src="/logo.png"
+                                alt="CareerPilotAI logo"
+                                className="h-full w-full object-contain"
+                            />
                         </div>
 
-                        <h2 className="mt-3 text-sm font-bold text-slate-950">
+                        <h2 className="mt-2 text-sm font-medium text-white">
                             CareerPilotAI
                         </h2>
+
+                        <p className="mt-2 text-[10px] text-center leading-4 text-slate-400">
+                            Your AI-powered companion for smarter career
+                            preparation.
+                        </p>
                     </div>
 
                     {/* Features */}
-                    <div className="mt-10 space-y-6">
-                        <div className="flex items-center gap-2">
-                            <FaCheck size={15} className="text-slate-900" />
-                            <span className="text-[11px] text-slate-800">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2.5">
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15">
+                                <FaCheck className="text-[9px] text-emerald-400" />
+                            </div>
+                            <span className="text-[10px] text-slate-300">
                                 AI Interviews
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <FaCheck size={15} className="text-slate-900" />
-                            <span className="text-[11px] text-slate-800">
+                        <div className="flex items-center gap-2.5">
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15">
+                                <FaCheck className="text-[9px] text-emerald-400" />
+                            </div>
+                            <span className="text-[10px] text-slate-300">
                                 Resume Analyser
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <FaCheck size={15} className="text-slate-900" />
-                            <span className="text-[11px] text-slate-800">
+                        <div className="flex items-center gap-2.5">
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/15">
+                                <FaCheck className="text-[9px] text-emerald-400" />
+                            </div>
+                            <span className="text-[10px] text-slate-300">
                                 Job Finder
                             </span>
                         </div>
@@ -89,32 +96,48 @@ const Auth = () => {
                 </div>
 
                 {/* Right Section */}
-                <div className="flex w-full flex-col items-center justify-center px-7 py-10 sm:w-[62%]">
-                    <h1 className="text-[25px] font-bold tracking-tight text-slate-950">
-                        Welcome Back
-                    </h1>
+                <div className="flex w-full flex-col items-center justify-center px-7 py-9 sm:w-[58%]">
+                    <div className="w-full">
+                        <p className="text-center text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400">
+                            Welcome back
+                        </p>
 
-                    <p className="mt-2 text-center text-sm leading-5 text-slate-600">
-                        Sign in to continue your
-                        <br />
-                        career journey.
-                    </p>
+                        <h1 className="mt-2 text-center text-[24px] font-bold tracking-tight text-slate-950">
+                            Let's get started
+                        </h1>
 
-                    {/* Google Button */}
-                    <motion.button
-                        onClick={handleGoogleAuth}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.97 }}
-                        transition={{ duration: 0.2 }}
-                        className="mt-8 flex h-9 w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-black px-4 text-sm text-white shadow-sm transition hover:bg-slate-900"
-                    >
-                        <FcGoogle className="text-lg" />
-                        <span>Continue with Google</span>
-                    </motion.button>
+                        <p className="mt-2 text-center text-xs leading-5 text-slate-400">
+                            Sign in to continue your
+                            <br />
+                            career journey.
+                        </p>
 
-                    <p className="mt-8 text-center text-[11px] text-slate-500">
-                        Let's build your future together.
-                    </p>
+                        {/* Google Button */}
+                        <motion.button
+                            onClick={handleGoogleAuth}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-7 flex h-10 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-800 shadow-lg transition hover:border-emerald-400 hover:bg-emerald-50/40"
+                        >
+                            <FcGoogle className="text-lg" />
+                            <span>Continue with Google</span>
+                        </motion.button>
+
+                        <div className="my-6 flex items-center gap-3">
+                            <div className="h-px flex-1 bg-slate-200" />
+                            <span className="text-[9px] uppercase tracking-wider text-slate-400">
+                                Secure login
+                            </span>
+                            <div className="h-px flex-1 bg-slate-200" />
+                        </div>
+
+                        <p className="text-center text-[10px] leading-4 text-slate-400">
+                            By continuing, you agree to use CareerPilotAI
+                            <br />
+                            for your personal career preparation.
+                        </p>
+                    </div>
                 </div>
             </motion.div>
         </div>
