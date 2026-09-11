@@ -10,7 +10,6 @@ import { setUserData } from "./redux/userSlice";
 export const serverUrl = "http://localhost:5000";
 
 function App() {
-
     const dispatch = useDispatch();
 
     // Fetch the current user and update the Redux store on component mount
