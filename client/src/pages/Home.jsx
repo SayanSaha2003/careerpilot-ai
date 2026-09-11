@@ -23,10 +23,24 @@ import credit from "../assets/credit.png";
 import { motion } from "motion/react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useState } from "react";
+import AuthModel from "../components/AuthModel";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const {userData } = useSelector((state) => state.user);
+    const navigate = useNavigate();
+    // State to manage the visibility of the authentication modal
+    const [showAuthModel, setShowAuthModel] = useState(false);
+
     return (
         <div className="relative min-h-screen overflow-hidden">
+            {/* Auth Model */}
+            {showAuthModel && (
+                <AuthModel onClose={() => setShowAuthModel(false)} />
+            )}
+
             {/* Navbar */}
             <Navbar />
 
@@ -71,6 +85,13 @@ const Home = () => {
                         {/* Buttons */}
                         <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
                             <motion.button
+                                onClick={() => {
+                                    if(!userData) {
+                                        setShowAuthModel(true);
+                                        return;
+                                    }
+                                    navigate("/interview");
+                                }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="flex cursor-pointer items-center gap-2 rounded-full bg-emerald-400 px-5 py-2.5 text-xs font-semibold text-black shadow-[0_0_25px_rgba(52,211,153,0.2)] transition duration-300 hover:bg-emerald-300 hover:shadow-[0_0_35px_rgba(52,211,153,0.35)]"
@@ -80,6 +101,13 @@ const Home = () => {
                             </motion.button>
 
                             <motion.button
+                                onClick={() => {
+                                    if(!userData) {
+                                        setShowAuthModel(true);
+                                        return;
+                                    }
+                                    navigate("/history");
+                                }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="flex cursor-pointer items-center gap-2 rounded-full border border-emerald-500/50 px-5 py-2.5 text-xs font-semibold text-white transition duration-300 hover:border-emerald-400 hover:bg-emerald-500/10"
