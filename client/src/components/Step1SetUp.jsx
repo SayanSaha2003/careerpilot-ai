@@ -10,8 +10,13 @@ import {
 } from "react-icons/fa6";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 function Step1SetUp({ onStart }) {
+    const { userData } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     const [resumeFile, setResumeFile] = useState(null);
     const [analysisIsDone, setAnalysisIsDone] = useState(false);
     const [analyzing, setAnalyzing] = useState(false);
@@ -20,11 +25,12 @@ function Step1SetUp({ onStart }) {
     const [experience, setExperience] = useState("");
     const [projects, setProjects] = useState("");
     const [skills, setSkills] = useState("");
-    const [mode, setMode] = useState("Technical Interview");
+    const [mode, setMode] = useState("Technical");
 
     const [loading, setLoading] = useState(false);
     const [resumeText, setResumeText] = useState("");
 
+    // Handle Resume Upload and Analysis
     const handleUploadResume = async () => {
         setAnalyzing(true);
 
@@ -51,6 +57,33 @@ function Step1SetUp({ onStart }) {
         } catch (error) {
             console.error(error);
             setAnalyzing(false);
+        }
+    };
+
+    // get the quistion from the server and start the interview
+    const handleStart = async () => {
+        setLoading(true);
+        try {
+            const result = await axios.post(
+                serverUrl + "/api/interview/generate-questions",
+                { role, experience, mode, projects, skills, resumeText },
+                { withCredentials: true },
+            );
+            console.log(result.data);
+            if (userData) {
+                dispatch(
+                    setUserData({
+                        ...userData,
+                        credits: result.data.creditsLeft,
+                    }),
+                );
+            }
+
+            setLoading(false);
+            onStart(result.data);
+        } catch (error) {
+            console.error(error);
+            setLoading(false);
         }
     };
 
@@ -203,14 +236,16 @@ function Step1SetUp({ onStart }) {
                             />
                         </div> */}
 
-                        {/* Interview Type */}
+                        {/* Interview Mode */}
                         <select
                             value={mode}
                             onChange={(e) => setMode(e.target.value)}
                             className="h-10 w-full cursor-pointer rounded-lg border border-white/10 bg-[#07110d] px-3 text-xs text-white outline-none focus:border-emerald-500/60"
                         >
-                            <option>Technical Interview</option>
-                            <option>HR Interview</option>
+                            <option value="Technical">
+                                Technical Interview
+                            </option>
+                            <option value="HR">HR Interview</option>
                         </select>
 
                         {/* Interviewer */}
@@ -352,12 +387,14 @@ function Step1SetUp({ onStart }) {
 
                         {/* Start Interview */}
                         <motion.button
+                            onClick={handleStart}
+                            disabled={!role || !experience || loading}
                             type="button"
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
                             className="h-10 w-full cursor-pointer rounded-lg bg-emerald-500 text-xs font-semibold text-black shadow-[0_0_20px_rgba(16,185,129,0.12)] transition hover:bg-emerald-400"
                         >
-                            Start Interview
+                            {loading ? "Starting..." : "Start Interview"}
                         </motion.button>
                     </div>
                 </div>
