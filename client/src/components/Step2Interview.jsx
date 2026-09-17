@@ -19,7 +19,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
     const [subtitle, setSubtitle] = useState("");
 
     const [isIntroPhase, setIsIntroPhase] = useState(true);
-    const [currentIndex, setCurrentIndex] = useState(1);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const currentQuestion = questions[currentIndex];
     const [timeLeft, setTimeLeft] = useState(questions[0]?.timeLimit || 60);
     const [answer, setAnswer] = useState("");

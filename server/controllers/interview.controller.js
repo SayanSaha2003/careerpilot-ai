@@ -89,9 +89,7 @@ export const generateQuestion = async (req, res) => {
         experience = experience?.trim();
         mode = mode?.trim();
         if (!role || !experience || !mode) {
-            return res
-                .status(400)
-                .json({ message: "Role, experience, and mode are required" });
+            return res.status(400).json({ message: "Role, experience, and mode are required" });
         }
         const safeResume = resumeText?.trim() || "None";
         const projectText = projects?.length > 0 ? projects.join(", ") : "None";
@@ -296,23 +294,19 @@ export const finishInterview = async (req, res) => {
         const { interviewId } = req.body;
         const interview = await Interview.findById(interviewId);
 
-        // Calculate the final score and average scores
+        // Calculate the final score and avg skill evolution
         const totalQuestions = interview.questions.length;
         const finalScore = Number(
-            interview.questions.reduce((acc, q) => acc + q.score, 0) /
-                totalQuestions,
+            interview.questions.reduce((acc, q) => acc + q.score, 0) / totalQuestions,
         ).toFixed(1);
-        const confidence = Number(
-            interview.questions.reduce((acc, q) => acc + q.confidence, 0) /
-                totalQuestions,
+        const avgConfidence = Number(
+            interview.questions.reduce((acc, q) => acc + q.confidence, 0) / totalQuestions,
         ).toFixed(1);
-        const communication = Number(
-            interview.questions.reduce((acc, q) => acc + q.communication, 0) /
-                totalQuestions,
+        const avgCommunication = Number(
+            interview.questions.reduce((acc, q) => acc + q.communication, 0) / totalQuestions,
         ).toFixed(1);
-        const correctness = Number(
-            interview.questions.reduce((acc, q) => acc + q.correctness, 0) /
-                totalQuestions,
+        const avgCorrectness = Number(
+            interview.questions.reduce((acc, q) => acc + q.correctness, 0) / totalQuestions,
         ).toFixed(1);
 
         // Update the interview document with the final score and status
@@ -323,9 +317,9 @@ export const finishInterview = async (req, res) => {
         // Return the final/avg scores and question-wise scores to the client
         res.json({
             finalScore,
-            confidence,
-            communication,
-            correctness,
+            confidence: avgConfidence,
+            communication: avgCommunication,
+            correctness: avgCorrectness,
             questionWiseScores: interview.questions.map((q) => ({
                 question: q.question,
                 score: q.score,
@@ -338,5 +332,55 @@ export const finishInterview = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ "failed to finish interview": error });
+    }
+};
+
+// Get all interviews of the logged-in user 
+export const getMyInterviews = async (req, res) => {
+    try {
+        const response = await Interview.find({ userId: req.userId })
+            .sort({ createdAt: -1 })
+            .select("role experience mode status finalScore createdAt");
+        return res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ "failed to fetch interviews": error });
+    }
+};
+
+// Get the report of a specific interview by its ID
+export const getInterviewReport = async (req, res) => {
+    try {
+        const response = await Interview.findById(req.params.id);
+        if (!response) {
+            return res.status(404).json({ message: "Interview not found" });
+        }
+
+        const totalQuestions = response.questions.length;
+
+        let totalConfidence = 0;
+        let totalCommunication = 0;
+        let totalCorrectness = 0;
+
+        response.questions.forEach((q) => {
+            totalConfidence += q.confidence;
+            totalCommunication += q.communication;
+            totalCorrectness += q.correctness;
+        });
+
+        const avgConfidence = (totalConfidence / totalQuestions).toFixed(1);
+        const avgCommunication = (totalCommunication / totalQuestions).toFixed(1);
+        const avgCorrectness = (totalCorrectness / totalQuestions).toFixed(1);
+
+        return res.status(200).json({
+            finalScore: response.finalScore,
+            confidence: avgConfidence,
+            communication: avgCommunication,
+            correctness: avgCorrectness,
+            questionWiseScores: response.questions,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ "failed to fetch report": error });
     }
 };
