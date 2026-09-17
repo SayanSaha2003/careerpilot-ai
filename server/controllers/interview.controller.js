@@ -45,7 +45,14 @@ export const analyzeResume = async (req, res) => {
             },
         ];
         const aiResponse = await askAi(messages);
-        const parsed = JSON.parse(aiResponse);
+
+        // Remove markdown code blocks if the AI included them
+        const cleanedResponse = aiResponse
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        const parsed = JSON.parse(cleanedResponse);
 
         // Permanently delete the temporary file from the server
         fs.unlinkSync(filepath);
@@ -293,19 +300,19 @@ export const finishInterview = async (req, res) => {
         const totalQuestions = interview.questions.length;
         const finalScore = Number(
             interview.questions.reduce((acc, q) => acc + q.score, 0) /
-            totalQuestions
+                totalQuestions,
         ).toFixed(1);
         const confidence = Number(
             interview.questions.reduce((acc, q) => acc + q.confidence, 0) /
-            totalQuestions
+                totalQuestions,
         ).toFixed(1);
         const communication = Number(
             interview.questions.reduce((acc, q) => acc + q.communication, 0) /
-            totalQuestions
+                totalQuestions,
         ).toFixed(1);
         const correctness = Number(
             interview.questions.reduce((acc, q) => acc + q.correctness, 0) /
-            totalQuestions
+                totalQuestions,
         ).toFixed(1);
 
         // Update the interview document with the final score and status

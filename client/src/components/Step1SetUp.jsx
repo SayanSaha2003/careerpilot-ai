@@ -23,12 +23,13 @@ function Step1SetUp({ onStart }) {
 
     const [role, setRole] = useState("");
     const [experience, setExperience] = useState("");
+    const [mode, setMode] = useState("Technical");
     const [projects, setProjects] = useState("");
     const [skills, setSkills] = useState("");
-    const [mode, setMode] = useState("Technical");
+    const [resumeText, setResumeText] = useState("");
+    const [interviewer, setInterviewer] = useState("female");
 
     const [loading, setLoading] = useState(false);
-    const [resumeText, setResumeText] = useState("");
 
     // Handle Resume Upload and Analysis
     const handleUploadResume = async () => {
@@ -69,7 +70,7 @@ function Step1SetUp({ onStart }) {
                 { role, experience, mode, projects, skills, resumeText },
                 { withCredentials: true },
             );
-            console.log(result.data);
+            console.log(result.data, interviewer);
             if (userData) {
                 dispatch(
                     setUserData({
@@ -80,7 +81,7 @@ function Step1SetUp({ onStart }) {
             }
 
             setLoading(false);
-            onStart(result.data);
+            onStart(result.data, interviewer);
         } catch (error) {
             console.error(error);
             setLoading(false);
@@ -249,22 +250,32 @@ function Step1SetUp({ onStart }) {
                         </select>
 
                         {/* Interviewer */}
-                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/3 px-3 py-2">
-                            <span className="text-xs text-slate-300">
+                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/2 px-3 py-2.5">
+                            <span className="text-xs font-medium text-slate-300">
                                 Interviewer
                             </span>
 
-                            <div className="flex gap-1.5">
+                            <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-black/20 p-1">
                                 <button
+                                    onClick={() => setInterviewer("female")}
                                     type="button"
-                                    className="cursor-pointer rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-medium text-black"
+                                    className={`cursor-pointer rounded-md px-3 py-1.5 text-[10px] font-medium transition-all duration-200 ${
+                                        interviewer === "female"
+                                            ? "bg-emerald-500 text-black shadow-[0_0_12px_rgba(16,185,129,0.15)]"
+                                            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                                    }`}
                                 >
                                     👩 Female
                                 </button>
 
                                 <button
+                                    onClick={() => setInterviewer("male")}
                                     type="button"
-                                    className="cursor-pointer rounded-full border border-white/10 px-3 py-1.5 text-[10px] text-slate-300 transition hover:border-emerald-500/40"
+                                    className={`cursor-pointer rounded-md px-3 py-1.5 text-[10px] font-medium transition-all duration-200 ${
+                                        interviewer === "male"
+                                            ? "bg-emerald-500 text-black shadow-[0_0_12px_rgba(16,185,129,0.15)]"
+                                            : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                                    }`}
                                 >
                                     👨 Male
                                 </button>
