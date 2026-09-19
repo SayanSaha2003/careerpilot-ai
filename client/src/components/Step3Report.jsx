@@ -12,6 +12,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts";
+import { downloadPDF } from "../utils/downloadPDF";
 
 function Step3Report({ report }) {
     const navigate = useNavigate();
@@ -69,6 +70,11 @@ function Step3Report({ report }) {
         feedback: item.feedback,
     }));
 
+    // Handle PDF Download
+    const handleDownload = () => {
+        downloadPDF(report);
+    };
+
     return (
         <div className="min-h-screen bg-[#020807] px-4 py-6 sm:px-6 lg:px-8">
             <motion.div
@@ -104,6 +110,7 @@ function Step3Report({ report }) {
 
                     {/* Download Button */}
                     <motion.button
+                    onClick={handleDownload}
                         type="button"
                         whileHover={{ scale: 1.03, y: -1 }}
                         whileTap={{ scale: 0.97 }}
@@ -228,7 +235,7 @@ function Step3Report({ report }) {
                                     Performance Trend
                                 </h2>
                             </div>
-                            
+
                             {/* Area Chart */}
                             <div className="h-64 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -354,7 +361,7 @@ function Step3Report({ report }) {
                                     Question Breakdown
                                 </h2>
                             </div>
-                            
+
                             {/* Question List */}
                             <div className="space-y-3">
                                 {questions.map((item, index) => (
