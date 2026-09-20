@@ -1,16 +1,104 @@
-# React + Vite
+# CareerPilotAI 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CareerPilotAI is an AI-powered career preparation platform that helps users prepare for interviews, analyze resumes, track interview performance, and improve their career readiness.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 🔐 Google Authentication
+- 📄 AI-powered Resume Analysis
+- 🎤 AI Mock Interviews
+- 🗣️ Speech Recognition & Speech Synthesis
+- 📊 Interview History & Reports
+- 💳 Razorpay Payment Integration
+- 👤 User & Credit Management
+- 📥 Interview Report PDF Download
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
 
-## Expanding the ESLint configuration
+- React.js
+- React Router
+- Redux Toolkit
+- Tailwind CSS
+- Axios
+- Firebase Authentication
+- Motion
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- Multer
+- OpenRouter AI
+- Razorpay
+
+### Deployment
+
+- Frontend: Render
+- Backend: Render
+- Database: MongoDB Atlas
+- Authentication: Firebase
+
+## 📁 Project Structure
+
+careerpilot-ai/
+├── client/       # React frontend
+└── server/       # Express backend
+
+## ⚙️ Environment Variables
+
+### Client
+
+VITE_SERVER_URL=
+VITE_FIREBASE_APIKEY=
+VITE_RAZORPAY_KEY_ID=
+
+### Server
+
+CLIENT_URL=
+JWT_SECRET=
+MONGODB_URL=
+OPENROUTER_API_KEY=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+PORT=
+
+## 🚀 Run Locally
+
+### 1. Clone the repository
+
+git clone <repository-url>
+cd careerpilot-ai
+
+### 2. Install dependencies
+
+cd client
+npm install
+
+cd ../server
+npm install
+
+### 3. Start the backend
+
+cd server
+npm run dev
+
+### 4. Start the frontend
+
+cd client
+npm run dev
+
+## 🌐 Deployment
+
+The application is deployed as separate frontend and backend services.
+
+- Frontend → Render Static Site
+- Backend → Render Web Service
+- MongoDB → MongoDB Atlas
+
+Make sure the production frontend URL is configured as CLIENT_URL on the backend and the production backend URL is configured as VITE_SERVER_URL on the frontend.
+
