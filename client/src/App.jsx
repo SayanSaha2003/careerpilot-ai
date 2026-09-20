@@ -11,7 +11,8 @@ import InterviewHistory from "./pages/InterviewHistory";
 import Pricing from "./pages/Pricing";
 import InterviewReport from "./pages/InterviewReport";
 
-export const serverUrl = "http://localhost:5000";
+// eslint-disable-next-line 
+export const serverUrl = import.meta.env.VITE_SERVER_URL ;
 
 function App() {
     const dispatch = useDispatch();
