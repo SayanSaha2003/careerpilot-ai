@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { serverUrl } from "../App";
 import axios from "axios";
 
-function Step2Interview({ interviewData, interviewer,  onFinish }) {
+function Step2Interview({ interviewData, interviewer, onFinish }) {
     const { interviewId, questions, userName } = interviewData;
 
     const voiceGender = interviewer;
@@ -82,9 +82,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
             window.speechSynthesis.cancel();
 
             // Add natural pauses
-            const humanText = text
-                .replace(/,/g, ", ... ")
-                .replace(/\./g, ". ... ");
+            const humanText = text.replace(/,/g, ", ... ").replace(/\./g, ". ... ");
 
             // setting up the speech synthesis with voice properties
             const utterance = new SpeechSynthesisUtterance(humanText);
@@ -101,7 +99,9 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
             };
             utterance.onend = () => {
                 videoRef.current?.pause();
-                videoRef.current.currentTime = 0;
+                if (videoRef.current) {
+                    videoRef.current.currentTime = 0;
+                }
                 setIsAIPlaying(false);
 
                 if (isMicOn) {
@@ -140,9 +140,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
             else if (currentQuestion) {
                 await new Promise((resolve) => setTimeout(resolve, 800)); // 800ms delay before next question
                 if (currentIndex === questions.length - 1) {
-                    await speakText(
-                        "Alright, this one might be a bit more challenging.",
-                    );
+                    await speakText("Alright, this one might be a bit more challenging.");
                 }
                 await speakText(currentQuestion.question);
                 if (isMicOn) {
@@ -192,8 +190,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
 
         // Converting user's speech to answer
         recognition.onresult = (event) => {
-            const transcript =
-                event.results[event.results.length - 1][0].transcript;
+            const transcript = event.results[event.results.length - 1][0].transcript;
 
             setAnswer((prev) => prev + " " + transcript);
         };
@@ -345,9 +342,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                     </div>
                     <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1">
                         <FaCircle className="text-[6px] text-emerald-400" />
-                        <span className="text-[9px] font-medium text-emerald-400">
-                            LIVE
-                        </span>
+                        <span className="text-[9px] font-medium text-emerald-400">LIVE</span>
                     </div>
                 </div>
 
@@ -393,9 +388,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                                 transition={{ duration: 0.7, delay: 0.05 }}
                                 className="rounded-xl border border-emerald-500/20 bg-[#050c09] p-4"
                             >
-                                <p className=" text-sm  text-white-400 sm:text-sm">
-                                    {subtitle}
-                                </p>
+                                <p className=" text-sm  text-white-400 sm:text-sm">{subtitle}</p>
                             </motion.div>
                         )}
 
@@ -407,14 +400,10 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                             className="rounded-xl border border-emerald-500/20 bg-[#050c09] p-4"
                         >
                             <div className="flex items-center justify-between">
-                                <p className="text-[10px] text-slate-400">
-                                    Interview Status
-                                </p>
+                                <p className="text-[10px] text-slate-400">Interview Status</p>
 
                                 <span className="text-[9px] font-medium text-emerald-400">
-                                    {isAIPlaying
-                                        ? "AI Speaking"
-                                        : "In Progress"}
+                                    {isAIPlaying ? "AI Speaking" : "In Progress"}
                                 </span>
                             </div>
 
@@ -422,14 +411,9 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
 
                             {/* Timer */}
                             <div className="flex flex-col items-center">
-                                <Timer
-                                    timeLeft={timeLeft}
-                                    totalTime={currentQuestion?.timeLimit}
-                                />
+                                <Timer timeLeft={timeLeft} totalTime={currentQuestion?.timeLimit} />
 
-                                <p className="mt-2 text-[8px] text-slate-500">
-                                    Time Remaining
-                                </p>
+                                <p className="mt-2 text-[8px] text-slate-500">Time Remaining</p>
                             </div>
 
                             <div className="my-4 h-px bg-white/5" />
@@ -440,18 +424,14 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                                     <p className="text-lg font-semibold text-emerald-400">
                                         {currentIndex + 1}
                                     </p>
-                                    <p className="text-[8px] text-slate-500">
-                                        Current
-                                    </p>
+                                    <p className="text-[8px] text-slate-500">Current</p>
                                 </div>
 
                                 <div className="text-right">
                                     <p className="text-lg font-semibold text-white">
                                         {questions.length}
                                     </p>
-                                    <p className="text-[8px] text-slate-500">
-                                        Total
-                                    </p>
+                                    <p className="text-[8px] text-slate-500">Total</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -468,15 +448,12 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                         >
                             <div className="mb-3 flex items-center justify-between">
                                 <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-emerald-400">
-                                    Question {currentIndex + 1} /{" "}
-                                    {questions.length}
+                                    Question {currentIndex + 1} / {questions.length}
                                 </span>
 
                                 <div className="flex items-center gap-1.5 text-slate-500">
                                     <FaClock className="text-[9px]" />
-                                    <span className="text-[9px]">
-                                        {String(timeLeft)}
-                                    </span>
+                                    <span className="text-[9px]">{String(timeLeft)}</span>
                                 </div>
                             </div>
 
@@ -561,9 +538,7 @@ function Step2Interview({ interviewData, interviewer,  onFinish }) {
                                             whileTap={{ scale: 0.98 }}
                                             className="h-10 flex-1 cursor-pointer rounded-lg bg-emerald-500 text-xs font-semibold text-black shadow-[0_0_20px_rgba(16,185,129,0.1)] transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/50 disabled:text-slate-400"
                                         >
-                                            {isSubmitting
-                                                ? "Submitting..."
-                                                : "Submit Answer"}
+                                            {isSubmitting ? "Submitting..." : "Submit Answer"}
                                         </motion.button>
                                     ) : (
                                         <motion.button
