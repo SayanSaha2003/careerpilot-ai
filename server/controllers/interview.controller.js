@@ -31,12 +31,13 @@ export const analyzeResume = async (req, res) => {
         const messages = [
             {
                 role: "system",
-                content: `Extract structured data from resume.Return strictly JSON:
+                content: `Extract structured data from resume and provide a short professional feedback message on the resume. Return strictly JSON:
                 {
                     "role": "string",                
                     "projects": ["project1", "project2"],
                     "experience": "string", 
-                    "skills": ["skill1", "skill2"]
+                    "skills": ["skill1", "skill2"],
+                    "feedback": "string"
                 }`,
             },
             {
@@ -63,6 +64,7 @@ export const analyzeResume = async (req, res) => {
             experience: parsed.experience,
             projects: parsed.projects,
             skills: parsed.skills,
+            feedback: parsed.feedback,
             resumeText,
         });
     } catch (error) {
@@ -335,7 +337,7 @@ export const finishInterview = async (req, res) => {
     }
 };
 
-// Get all interviews of the logged-in user 
+// Get all interviews of the logged-in user
 export const getMyInterviews = async (req, res) => {
     try {
         const response = await Interview.find({ userId: req.userId })

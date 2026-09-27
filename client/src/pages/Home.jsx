@@ -156,7 +156,7 @@ const Home = () => {
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: false, amount: 0.3 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                         className="mb-10 text-center"
                     >
                         <h2 className="text-3xl font-normal tracking-tight text-white sm:text-3xl">
@@ -264,7 +264,7 @@ const Home = () => {
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: false, amount: 0.3 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                         className="mb-8 text-center"
                     >
                         <h2 className="text-2xl font-normal tracking-tight text-white sm:text-3xl">
@@ -387,7 +387,7 @@ const Home = () => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: false, amount: 0.3 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                         className="mb-8 text-center"
                     >
                         <h2 className="text-2xl font-normal tracking-tight text-white sm:text-3xl">

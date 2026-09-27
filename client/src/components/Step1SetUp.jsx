@@ -26,28 +26,28 @@ function Step1SetUp({ onStart }) {
     const [mode, setMode] = useState("Technical");
     const [projects, setProjects] = useState("");
     const [skills, setSkills] = useState("");
+    const [feedback, setFeedback] = useState("");
     const [resumeText, setResumeText] = useState("");
     const [interviewer, setInterviewer] = useState("female");
 
     const [loading, setLoading] = useState(false);
 
     // Handle Resume Upload and Analysis
-    const handleUploadResume = async () => {
+    const handleAnalyzeResume = async () => {
         setAnalyzing(true);
 
         const formdata = new FormData();
         formdata.append("resume", resumeFile);
 
         try {
-            const result = await axios.post(
-                serverUrl + "/api/interview/resume",
-                formdata,
-                { withCredentials: true },
-            );
+            const result = await axios.post(serverUrl + "/api/interview/resume", formdata, {
+                withCredentials: true,
+            });
             console.log(result.data);
 
             setProjects(result.data.projects || []);
             setSkills(result.data.skills || []);
+            setFeedback(result.data.feedback || "");
 
             setRole(result.data.role || "");
             setExperience(result.data.experience || "");
@@ -110,12 +110,8 @@ function Step1SetUp({ onStart }) {
                             </div>
 
                             <div>
-                                <h2 className="text-xs font-semibold text-white">
-                                    CareerPilotAI
-                                </h2>
-                                <p className="text-[9px] text-slate-500">
-                                    AI Career Preparation
-                                </p>
+                                <h2 className="text-xs font-semibold text-white">CareerPilotAI</h2>
+                                <p className="text-[9px] text-slate-500">AI Career Preparation</p>
                             </div>
                         </div>
 
@@ -128,15 +124,12 @@ function Step1SetUp({ onStart }) {
                             <h1 className="mt-2 text-3xl font-bold leading-tight text-white">
                                 Start Your
                                 <br />
-                                <span className="text-emerald-400">
-                                    AI Interview
-                                </span>
+                                <span className="text-emerald-400">AI Interview</span>
                             </h1>
 
                             <p className="mt-4 max-w-xs text-xs leading-5 text-slate-400">
-                                Practice real interview scenarios powered by AI.
-                                Improve your communication, technical skills,
-                                and confidence.
+                                Practice real interview scenarios powered by AI. Improve your
+                                communication, technical skills, and confidence.
                             </p>
                         </div>
                     </div>
@@ -173,9 +166,7 @@ function Step1SetUp({ onStart }) {
                                 <p className="text-[10px] font-medium text-white">
                                     Performance Analytics
                                 </p>
-                                <p className="text-[8px] text-slate-500">
-                                    Understand and improve
-                                </p>
+                                <p className="text-[8px] text-slate-500">Understand and improve</p>
                             </div>
                         </div>
                     </div>
@@ -243,17 +234,13 @@ function Step1SetUp({ onStart }) {
                             onChange={(e) => setMode(e.target.value)}
                             className="h-10 w-full cursor-pointer rounded-lg border border-white/10 bg-[#07110d] px-3 text-xs text-white outline-none focus:border-emerald-500/60"
                         >
-                            <option value="Technical">
-                                Technical Interview
-                            </option>
+                            <option value="Technical">Technical Interview</option>
                             <option value="HR">HR Interview</option>
                         </select>
 
                         {/* Interviewer */}
                         <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/2 px-3 py-2.5">
-                            <span className="text-xs font-medium text-slate-300">
-                                Interviewer
-                            </span>
+                            <span className="text-xs font-medium text-slate-300">Interviewer</span>
 
                             <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-black/20 p-1">
                                 <button
@@ -284,7 +271,7 @@ function Step1SetUp({ onStart }) {
 
                         {/* Strong Topic */}
                         <textarea
-                            placeholder="Strong Topic (e.g. React JS, DBMS, OS) — Optional"
+                            placeholder="Strong Topic (Optional)"
                             className="h-20 w-full resize-none rounded-lg border border-white/10 bg-white/3 p-3 text-xs text-white outline-none placeholder:text-slate-600 transition focus:border-emerald-500/60 focus:bg-emerald-500/3"
                         />
 
@@ -293,20 +280,14 @@ function Step1SetUp({ onStart }) {
                             <motion.div
                                 whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.97 }}
-                                onClick={() =>
-                                    document
-                                        .getElementById("resumeUpload")
-                                        .click()
-                                }
+                                onClick={() => document.getElementById("resumeUpload").click()}
                                 className="flex min-h-25 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-emerald-500/25 bg-emerald-500/2 p-3 transition hover:border-emerald-400/60 hover:bg-emerald-500/5"
                             >
                                 <input
                                     id="resumeUpload"
                                     type="file"
                                     accept="application/pdf"
-                                    onChange={(e) =>
-                                        setResumeFile(e.target.files[0])
-                                    }
+                                    onChange={(e) => setResumeFile(e.target.files[0])}
                                     className="hidden"
                                 />
 
@@ -322,15 +303,13 @@ function Step1SetUp({ onStart }) {
                                             type="button"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleUploadResume();
+                                                handleAnalyzeResume();
                                             }}
                                             whileHover={{ scale: 1.04, y: -1 }}
                                             whileTap={{ scale: 0.96 }}
                                             className="mt-4 cursor-pointer rounded-md border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1 text-[10px] font-medium text-emerald-400 transition-colors duration-200 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-300"
                                         >
-                                            {analyzing
-                                                ? "Analysing..."
-                                                : "Analyze Resume"}
+                                            {analyzing ? "Analysing..." : "Analyze Resume"}
                                         </motion.button>
                                     </>
                                 ) : (
@@ -360,16 +339,11 @@ function Step1SetUp({ onStart }) {
 
                                 {/* Projects */}
                                 <div className="mt-3">
-                                    <p className="text-md font-medium text-slate-400">
-                                        Projects
-                                    </p>
+                                    <p className="text-md font-medium text-slate-400">Projects</p>
 
                                     <ul className="mt-2 space-y-1">
                                         {projects.map((project, index) => (
-                                            <li
-                                                key={index}
-                                                className="text-xs text-slate-300"
-                                            >
+                                            <li key={index} className="text-xs text-slate-300">
                                                 • {project}
                                             </li>
                                         ))}
@@ -378,9 +352,7 @@ function Step1SetUp({ onStart }) {
 
                                 {/* Skills */}
                                 <div className="mt-3">
-                                    <p className="text-md font-medium text-slate-400">
-                                        Skills
-                                    </p>
+                                    <p className="text-md font-medium text-slate-400">Skills</p>
 
                                     <div className="mt-2 flex flex-wrap gap-2">
                                         {skills.map((skill, index) => (
@@ -392,6 +364,12 @@ function Step1SetUp({ onStart }) {
                                             </span>
                                         ))}
                                     </div>
+                                </div>
+
+                                {/* Feedback */}
+                                <div className="mt-3">
+                                    <p className="text-md font-medium text-slate-400">Professional Feedback</p>
+                                    <p className="text-sm mt-1 text-slate-300">{feedback}</p>
                                 </div>
                             </motion.div>
                         )}
